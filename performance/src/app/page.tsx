@@ -1,95 +1,76 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Image from 'next/image';
+import './main_page.css';
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div>
+      <header>
+        <h1>Countries list 🌎</h1>
+      </header>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+      <div className="controls">
+        <input type="text" id="search" placeholder="🔎 Search country..." />
+        <select id="region-filter">
+          <option value="">All regions 🌎</option>
+          <option value="africa">Africa</option>
+          <option value="americas">Americas</option>
+          <option value="asia">Asia</option>
+          <option value="europe">Europe</option>
+          <option value="oceania">Oceania</option>
+        </select>
+        <select id="sort">
+          <option value="name-asc">🔠 Name (A-Z)</option>
+          <option value="name-desc">🔠 Name (Z-A)</option>
+          <option value="pop-asc">👥 Name (↑)</option>
+          <option value="pop-desc">👥 Name (↓)</option>
+        </select>
+      </div>
+
+      <main>
+        <div className="countries">
+          <div className="country-card">
             <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+              src="https://flagcdn.com/w320/fr.png"
+              alt="Флаг Франции"
+              width={100}
+              height={100}
             />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+            <div className="info">
+              <h2>Франция</h2>
+              <p>👥 67 млн</p>
+              <p>🌍 Европа</p>
+            </div>
+          </div>
+
+          <div className="country-card">
+            <Image
+              src="https://flagcdn.com/w320/jp.png"
+              alt="Флаг Японии"
+              width={100}
+              height={100}
+            />
+            <div className="info">
+              <h2>Япония</h2>
+              <p>👥 126 млн</p>
+              <p>🌏 Азия</p>
+            </div>
+          </div>
+
+          <div className="country-card">
+            <Image
+              src="https://flagcdn.com/w320/br.png"
+              alt="Флаг Бразилии"
+              width={100}
+              height={100}
+            />
+            <div className="info">
+              <h2>Бразилия</h2>
+              <p>👥 213 млн</p>
+              <p>🌎 Америка</p>
+            </div>
+          </div>
         </div>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }

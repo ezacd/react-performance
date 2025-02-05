@@ -1,0 +1,68 @@
+body {
+  background-color: #121212;
+  color: #ffffff;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input,
+select {
+  background-color: #222;
+  color: white;
+  border: 1px solid #444;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+input::placeholder {
+  color: #888;
+}
+
+.countries {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.country-card {
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  padding: 15px;
+  width: 200px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.country-card img {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.country-card .info {
+  margin-top: 10px;
+}
+
+.country-card h2 {
+  font-size: 18px;
+}
+
+.country-card p {
+  font-size: 14px;
+  color: #bbbbbb;
+}
