@@ -1,16 +1,6 @@
-import { NextConfig } from 'next';
-
-const config: NextConfig = {
+// next.config.js
+module.exports = {
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'flagcdn.com',
-        port: '',
-        search: '',
-      },
-    ],
+    domains: ['upload.wikimedia.org', 'flagcdn.com'],
   },
 };
-
-export default config;

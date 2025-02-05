@@ -47,6 +47,11 @@ input::placeholder {
   width: 200px;
   text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.1s ease-in-out;
+}
+
+.country-card:hover {
+  transform: scale(1.1);
 }
 
 .country-card img {
@@ -56,6 +61,9 @@ input::placeholder {
 
 .country-card .info {
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .country-card h2 {

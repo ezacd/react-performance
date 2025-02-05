@@ -1,7 +1,41 @@
 import Image from 'next/image';
 import './main_page.css';
 
-export default function Home() {
+export default async function Home() {
+  const res = await fetch('https://restcountries.com/v3.1/all');
+  const countries = await res.json();
+
+  const getPopulation = (country: typeof countries) => {
+    if (country.population < 1000) {
+      return country.population + ' ppl';
+    }
+
+    if (country.population < 1000000) {
+      return (country.population / 1000).toFixed(2) + ' k';
+    }
+
+    return (country.population / 1000000).toFixed(2) + ' mm';
+  };
+
+  const getRegion = (country: typeof countries) => {
+    const region = country.region;
+
+    switch (region) {
+      case 'Europe':
+        return '🌍 ' + region;
+      case 'Africa':
+        return '🌍 ' + region;
+      case 'Americas':
+        return '🌎 ' + region;
+      case 'Asia':
+        return '🌏 ' + region;
+      case 'Oceania':
+        return '🌏 ' + region;
+      default:
+        return '🇦🇶 ' + region;
+    }
+  };
+
   return (
     <div>
       <header>
@@ -17,6 +51,7 @@ export default function Home() {
           <option value="asia">Asia</option>
           <option value="europe">Europe</option>
           <option value="oceania">Oceania</option>
+          <option value="antarctic">Antarctic</option>
         </select>
         <select id="sort">
           <option value="name-asc">🔠 Name (A-Z)</option>
@@ -28,47 +63,21 @@ export default function Home() {
 
       <main>
         <div className="countries">
-          <div className="country-card">
-            <Image
-              src="https://flagcdn.com/w320/fr.png"
-              alt="Флаг Франции"
-              width={100}
-              height={100}
-            />
-            <div className="info">
-              <h2>Франция</h2>
-              <p>👥 67 млн</p>
-              <p>🌍 Европа</p>
+          {countries.map((country: typeof countries) => (
+            <div key={country.cca3} className="country-card">
+              <Image
+                src={country.flags.png}
+                alt="Флаг Бразилии"
+                width={100}
+                height={100}
+              />
+              <div className="info">
+                <h2>{country.name.common}</h2>
+                <p>👥 {getPopulation(country)}</p>
+                <p>{getRegion(country)}</p>
+              </div>
             </div>
-          </div>
-
-          <div className="country-card">
-            <Image
-              src="https://flagcdn.com/w320/jp.png"
-              alt="Флаг Японии"
-              width={100}
-              height={100}
-            />
-            <div className="info">
-              <h2>Япония</h2>
-              <p>👥 126 млн</p>
-              <p>🌏 Азия</p>
-            </div>
-          </div>
-
-          <div className="country-card">
-            <Image
-              src="https://flagcdn.com/w320/br.png"
-              alt="Флаг Бразилии"
-              width={100}
-              height={100}
-            />
-            <div className="info">
-              <h2>Бразилия</h2>
-              <p>👥 213 млн</p>
-              <p>🌎 Америка</p>
-            </div>
-          </div>
+          ))}
         </div>
       </main>
     </div>
