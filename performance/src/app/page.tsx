@@ -36,16 +36,18 @@ export default function Home() {
       : countries.filter((country) => country.region.toLowerCase() === region);
 
   const sortedCountries = [...filteredCountries].sort((a, b) => {
-    if (sorting === 'name-asc') {
-      return a.name.common.localeCompare(b.name.common);
-    } else if (sorting === 'name-desc') {
-      return b.name.common.localeCompare(a.name.common);
-    } else if (sorting === 'pop-asc') {
-      return a.population - b.population;
-    } else if (sorting === 'pop-desc') {
-      return b.population - a.population;
+    switch (sorting) {
+      case 'name-asc':
+        return a.name.common.localeCompare(b.name.common);
+      case 'name-desc':
+        return b.name.common.localeCompare(a.name.common);
+      case 'pop-asc':
+        return a.population - b.population;
+      case 'pop-desc':
+        return b.population - a.population;
+      default:
+        return 0;
     }
-    return 0;
   });
 
   return (
