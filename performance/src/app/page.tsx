@@ -18,6 +18,7 @@ interface Country {
 
 export default function Home() {
   const [countries, setCountries] = useState<Country[]>([]);
+  const [search, setSearch] = useState<string>('');
   const [region, setRegion] = useState<string>('all');
   const [sorting, setSorting] = useState<string>('name-asc');
 
@@ -30,12 +31,12 @@ export default function Home() {
     fetchCountries();
   }, []);
 
-  const filteredCountries =
+  const filteredRegionCountries =
     region === 'all'
       ? countries
       : countries.filter((country) => country.region.toLowerCase() === region);
 
-  const sortedCountries = [...filteredCountries].sort((a, b) => {
+  const sortedCountries = [...filteredRegionCountries].sort((a, b) => {
     switch (sorting) {
       case 'name-asc':
         return a.name.common.localeCompare(b.name.common);
@@ -50,6 +51,10 @@ export default function Home() {
     }
   });
 
+  const filteredSearchCountries = sortedCountries.filter((country) =>
+    country.name.common.toLowerCase().includes(search.toLowerCase()),
+  );
+
   return (
     <div>
       <header>
@@ -57,7 +62,12 @@ export default function Home() {
       </header>
 
       <div className="controls">
-        <input type="text" id="search" placeholder="🔎 Search country..." />
+        <input
+          type="text"
+          id="search"
+          placeholder="🔎 Search country..."
+          onChange={(e) => setSearch(e.target.value)}
+        />
         <select id="region-filter" onChange={(e) => setRegion(e.target.value)}>
           <option value="all">All regions 🌎</option>
           <option value="africa">Africa</option>
@@ -77,7 +87,7 @@ export default function Home() {
 
       <main>
         <div className="countries">
-          <CountryList countries={sortedCountries} />
+          <CountryList countries={filteredSearchCountries} />
         </div>
       </main>
     </div>
@@ -93,7 +103,7 @@ const getPopulation = (country: Country) => {
     return (country.population / 1000).toFixed(2) + ' k';
   }
 
-  return (country.population / 1000000).toFixed(2) + ' m'; // исправил "mm" на "m"
+  return (country.population / 1000000).toFixed(2) + ' m';
 };
 
 const getRegion = (country: Country) => {
