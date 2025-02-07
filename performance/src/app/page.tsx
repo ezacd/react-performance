@@ -16,11 +16,13 @@ interface Country {
   };
 }
 
+type SortingOption = 'name-asc' | 'name-desc' | 'pop-asc' | 'pop-desc';
+
 export default function Home() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [search, setSearch] = useState<string>('');
   const [region, setRegion] = useState<string>('all');
-  const [sorting, setSorting] = useState<string>('name-asc');
+  const [sorting, setSorting] = useState<SortingOption>('name-asc');
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -31,29 +33,29 @@ export default function Home() {
     fetchCountries();
   }, []);
 
-  const filteredRegionCountries =
-    region === 'all'
-      ? countries
-      : countries.filter((country) => country.region.toLowerCase() === region);
-
-  const sortedCountries = [...filteredRegionCountries].sort((a, b) => {
-    switch (sorting) {
-      case 'name-asc':
-        return a.name.common.localeCompare(b.name.common);
-      case 'name-desc':
-        return b.name.common.localeCompare(a.name.common);
-      case 'pop-asc':
-        return a.population - b.population;
-      case 'pop-desc':
-        return b.population - a.population;
-      default:
-        return 0;
-    }
-  });
-
-  const filteredSearchCountries = sortedCountries.filter((country) =>
-    country.name.common.toLowerCase().includes(search.toLowerCase()),
-  );
+  const getFilteredSortedCountries = () => {
+    return countries
+      .filter((country) => {
+        return region === 'all' || country.region.toLowerCase() === region;
+      })
+      .filter((country) => {
+        return country.name.common.toLowerCase().includes(search.toLowerCase());
+      })
+      .sort((a, b) => {
+        switch (sorting) {
+          case 'name-asc':
+            return a.name.common.localeCompare(b.name.common);
+          case 'name-desc':
+            return b.name.common.localeCompare(a.name.common);
+          case 'pop-asc':
+            return a.population - b.population;
+          case 'pop-desc':
+            return b.population - a.population;
+          default:
+            return 0;
+        }
+      });
+  };
 
   return (
     <div>
@@ -77,7 +79,10 @@ export default function Home() {
           <option value="oceania">Oceania</option>
           <option value="antarctic">Antarctic</option>
         </select>
-        <select id="sort" onChange={(e) => setSorting(e.target.value)}>
+        <select
+          id="sort"
+          onChange={(e) => setSorting(e.target.value as SortingOption)}
+        >
           <option value="name-asc">🔠 Name (A-Z)</option>
           <option value="name-desc">🔠 Name (Z-A)</option>
           <option value="pop-asc">👥 Population (↑)</option>
@@ -87,7 +92,7 @@ export default function Home() {
 
       <main>
         <div className="countries">
-          <CountryList countries={filteredSearchCountries} />
+          <CountryList countries={getFilteredSortedCountries()} />
         </div>
       </main>
     </div>

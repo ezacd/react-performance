@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Список стран',
-  description: 'Список стран с фильтрами и сортировкой',
+  title: 'Country list',
+  description: 'List of countries with filters and sorting',
 };
 
 export default function RootLayout({
