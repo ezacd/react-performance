@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import Image from 'next/image';
 import './main_page.css';
+import React from 'react';
 
 interface Country {
   cca3: string;
@@ -33,7 +34,7 @@ export default function Home() {
     fetchCountries();
   }, []);
 
-  const getFilteredSortedCountries = () => {
+  const getFilteredSortedCountries = useMemo(() => {
     return countries
       .filter((country) => {
         return region === 'all' || country.region.toLowerCase() === region;
@@ -55,7 +56,28 @@ export default function Home() {
             return 0;
         }
       });
-  };
+  }, [countries, region, search, sorting]);
+
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearch(e.target.value);
+    },
+    [],
+  );
+
+  const handleRegionChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setRegion(e.target.value);
+    },
+    [],
+  );
+
+  const handleSortingChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSorting(e.target.value as SortingOption);
+    },
+    [],
+  );
 
   return (
     <div>
@@ -68,9 +90,9 @@ export default function Home() {
           type="text"
           id="search"
           placeholder="🔎 Search country..."
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={handleSearchChange}
         />
-        <select id="region-filter" onChange={(e) => setRegion(e.target.value)}>
+        <select id="region-filter" onChange={handleRegionChange}>
           <option value="all">All regions 🌎</option>
           <option value="africa">Africa</option>
           <option value="americas">Americas</option>
@@ -79,10 +101,7 @@ export default function Home() {
           <option value="oceania">Oceania</option>
           <option value="antarctic">Antarctic</option>
         </select>
-        <select
-          id="sort"
-          onChange={(e) => setSorting(e.target.value as SortingOption)}
-        >
+        <select id="sort" onChange={handleSortingChange}>
           <option value="name-asc">🔠 Name (A-Z)</option>
           <option value="name-desc">🔠 Name (Z-A)</option>
           <option value="pop-asc">👥 Population (↑)</option>
@@ -92,7 +111,7 @@ export default function Home() {
 
       <main>
         <div className="countries">
-          <CountryList countries={getFilteredSortedCountries()} />
+          <CountryList countries={getFilteredSortedCountries} />
         </div>
       </main>
     </div>
@@ -128,23 +147,33 @@ const getRegion = (country: Country) => {
   }
 };
 
+const CountryCard = React.memo(function CountryCard({
+  country,
+}: {
+  country: Country;
+}) {
+  return (
+    <div key={country.cca3} className="country-card">
+      <Image
+        src={country.flags.png}
+        alt={`Flag of ${country.name.common}`}
+        width={100}
+        height={100}
+      />
+      <div className="info">
+        <h2>{country.name.common}</h2>
+        <p>👥 {getPopulation(country)}</p>
+        <p>{getRegion(country)}</p>
+      </div>
+    </div>
+  );
+});
+
 function CountryList({ countries }: { countries: Country[] }) {
   return (
     <>
       {countries.map((country) => (
-        <div key={country.cca3} className="country-card">
-          <Image
-            src={country.flags.png}
-            alt={`Flag of ${country.name.common}`}
-            width={100}
-            height={100}
-          />
-          <div className="info">
-            <h2>{country.name.common}</h2>
-            <p>👥 {getPopulation(country)}</p>
-            <p>{getRegion(country)}</p>
-          </div>
-        </div>
+        <CountryCard key={country.cca3} country={country} />
       ))}
     </>
   );
